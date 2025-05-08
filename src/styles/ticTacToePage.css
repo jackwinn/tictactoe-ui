@@ -1,0 +1,36 @@
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .player-indicator {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+    gap: 5px;
+  }
+  
+  .square {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #555;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s;
+  }
+  
+  .square:hover {
+    background-color: #e6e6e6;
+  }
+  

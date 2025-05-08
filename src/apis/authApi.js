@@ -8,7 +8,33 @@ const login = async (credential) => {
   };
   try {
     const response = await baseApi.post(url, payload);
-    console.log(response.data)
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const logout = async (credential) => {
+  const url = `/auths/logout`;
+  const payload = {
+    email: credential.email,
+    password: credential.password,
+  };
+  try {
+    const response = await baseApi.post(url, payload);
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const refreshToken = async () => {
+  const url = `/auths/refreshToken`;
+
+  try {
+    const response = await baseApi.post(url);
     return response.data;
   } catch (err) {
     throw err;
@@ -17,4 +43,6 @@ const login = async (credential) => {
 
 export default {
   login: login,
+  logout: logout,
+  refreshToken: refreshToken,
 };

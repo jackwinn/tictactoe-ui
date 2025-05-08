@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import "../styles/loginPage.css";
 import { useNavigate } from "react-router-dom";
 import authBiz from "../businesses/authBiz";
-
+import userBiz from "../businesses/userBiz";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
-  const [form, setForm] = useState({ email: "admin@gmail.com", password: "admin123" });
+  const [form, setForm] = useState({
+    email: "jack@gmail.com",
+    password: "1234",
+  });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -16,10 +20,15 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const accessToken = await authBiz.login(form);
+      const { accessToken } = await authBiz.login(form);
       console.log("Login success:", accessToken);
-      localStorage.setItem("accessToken", accessToken);
-      navigate("/ticTacToe");
+
+      if (accessToken) {
+        localStorage.setItem("accessToken", accessToken);
+        const user = await userBiz.me(accessToken);
+        console.log(user);
+        navigate("/ticTacToe");
+      }
     } catch (err) {
       setError("Login failed. Check credentials.");
     }
@@ -31,7 +40,7 @@ const LoginPage = () => {
         <h2 className="login-title">Login</h2>
         <label htmlFor="email">Email</label>
         <input
-          type="text"
+          type="email"
           id="email"
           name="email"
           value={form.email}
@@ -49,7 +58,11 @@ const LoginPage = () => {
           required
         />
         <button type="submit">Login</button>
-        {error && <p>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
+
+        <p className="register-link">
+          Don't have an account? <Link to="/registration">Register here</Link>
+        </p>
       </form>
     </div>
   );
