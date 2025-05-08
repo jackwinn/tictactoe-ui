@@ -1,63 +1,126 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/ticTacToePage.css";
+import { io } from "socket.io-client";
+const socket = io(process.env.REACT_APP_SOCKET);
 
 const TicTacToePage = () => {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [isXNext, setIsXNext] = useState(true);
-  const [status, setStatus] = useState("In Progress");
+  const [game, setGame] = useState({
+    board: Array(9).fill(null),
+    currentPlayer: "X",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [playerTurn, setPlayerTurn] = useState("Player A");
 
-  const winningCombos = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-    [0, 4, 8], [2, 4, 6]             // diagonals
-  ];
+  useEffect(() => {
+    socket.on("moveMade", (data) => {
+      setGame(data.updatedGame);
+      setPlayerTurn(data.updatedGame.currentPlayer);
+      setErrorMessage("");
+    });
 
-  const checkWinner = (newBoard) => {
-    for (let combo of winningCombos) {
-      const [a, b, c] = combo;
-      if (newBoard[a] && newBoard[a] === newBoard[b] && newBoard[a] === newBoard[c]) {
-        return newBoard[a]; // "X" or "O"
+    socket.on("gameReset", (newGame) => {
+      setGame(newGame);
+      setPlayerTurn("Player A");
+      setErrorMessage("");
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error.message);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    return () => {
+      socket.off("moveMade");
+      socket.off("gameReset");
+      socket.off("connect_error");
+      socket.off("disconnect");
+    };
+  }, []);
+
+  const calculateWinner = (squares) => {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        return { winner: squares[a], winningLine: [a, b, c] };
       }
     }
-    if (!newBoard.includes(null)) {
-      return "Draw";
-    }
+
     return null;
   };
 
-  const handleClick = (index) => {
-    if (board[index] || status !== "In Progress") return;
+  const makeMove = (index) => {
+    const squares = [...game.board];
 
-    const newBoard = [...board];
-    newBoard[index] = isXNext ? "X" : "O";
-    setBoard(newBoard);
-
-    const result = checkWinner(newBoard);
-    if (result === "X" || result === "O") {
-      setStatus(`Player ${result} wins!`);
-    } else if (result === "Draw") {
-      setStatus("It's a draw!");
-    } else {
-      setIsXNext(!isXNext);
+    if (calculateWinner(squares) || squares[index]) {
+      setErrorMessage("Invalid move. Please try again.");
+      return;
     }
+
+    squares[index] = game.currentPlayer;
+
+    const updatedGame = {
+      ...game,
+      board: squares,
+      currentPlayer: game.currentPlayer === "X" ? "O" : "X",
+    };
+
+    socket.emit("makeMove", { index, updatedGame });
   };
 
-  const renderSquare = (index) => (
-    <button className="square" onClick={() => handleClick(index)} key={index}>
-      {board[index]}
-    </button>
-  );
+  const resetGame = () => {
+    const newGame = {
+      board: Array(9).fill(null),
+      currentPlayer: "X",
+    };
+
+    socket.emit("resetGame", newGame);
+  };
+
+  const result = calculateWinner(game.board);
+  const winner = result?.winner;
+  const winningLine = result?.winningLine || [];
 
   return (
-    <div className="game-container">
-      <div className="player-indicator">
-        {status === "In Progress"
-          ? `Current Player: ${isXNext ? "X" : "O"}`
-          : status}
+    <div className="board-container">
+      <h1>Welcome to Tic Tac Toe Game</h1>
+      <div>
+        <div className="board">
+          {game.board.map((cell, index) => (
+            <div
+              key={index}
+              className={`cell ${winningLine.includes(index) ? "winner" : ""}`}
+              onClick={() => makeMove(index)}
+            >
+              {cell}
+            </div>
+          ))}
+        </div>
+        <p className="current-player">
+          {winner ? `Player ${winner} wins!` : `Current Player: ${playerTurn}`}
+        </p>
+        <button className="reset-button" onClick={resetGame}>
+          Reset Game
+        </button>
       </div>
-      <div className="board">
-        {board.map((_, index) => renderSquare(index))}
-      </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };
