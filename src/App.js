@@ -30,12 +30,12 @@ function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/tictactoe-ui" element={<Navigate to="/login" replace />} />
+        <Route path="/tictactoe-ui/login" element={<LoginPage />} />
+        <Route path="/tictactoe-ui/registration" element={<RegistrationPage />} />
+        <Route path="tictactoe-ui/*" element={<NotFoundPage />} />
         <Route
-          path="/ticTacToe"
+          path="/tictactoe-ui/ticTacToe"
           element={
             <ProtectedRoute>
               <TicTacToePage />
