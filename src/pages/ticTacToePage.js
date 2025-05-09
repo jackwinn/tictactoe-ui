@@ -109,7 +109,8 @@ const TicTacToePage = () => {
     const username = user.username;
     setPlayerName(username);
 
-    const newSocket = io(process.env.REACT_APP_SOCKET, {
+    // const newSocket = io(process.env.REACT_APP_BACKEND, {
+    const newSocket = io("http://localhost:4000", {
       autoConnect: true,
     });
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ticTacToePage.css";
 import { io } from "socket.io-client";
-const socket = io(process.env.REACT_APP_SOCKET);
 
 const TicTacToePage = () => {
   const storedUser = localStorage.getItem("user");
