@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunktictactoe_ui=self.webpackChunktictactoe_ui||[]).push([[967],{967:(e,s,c)=>{c.r(s),c.d(s,{default:()=>n});c(43);var o=c(579);const n=()=>(0,o.jsx)("div",{className:"notfound-container",children:(0,o.jsxs)("div",{className:"notfound-box",children:[(0,o.jsx)("h1",{children:"404"}),(0,o.jsx)("p",{children:"Oops! The page you're looking for doesn't exist."}),(0,o.jsx)("a",{href:"/",className:"home-link",children:"Back to Home"})]})})}}]);
+//# sourceMappingURL=967.583ba47d.chunk.js.map
