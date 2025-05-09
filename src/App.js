@@ -1,5 +1,5 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { Suspense, lazy, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./routing/protectedRoute";
 import "./App.css";
 import authUtil from "./utilities/authUtil";
@@ -11,8 +11,6 @@ const NotFoundPage = lazy(() => import("./pages/notFoundPage"));
 const TicTacToePage = lazy(() => import("./pages/ticTacToePage"));
 
 function App() {
-  const navigate = useNavigate();
-
   useEffect(() => {
     // if (authUtil.isAccessTokenExpired()) {
     // }
@@ -32,6 +30,7 @@ function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="*" element={<NotFoundPage />} />

@@ -21,12 +21,12 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const { accessToken } = await authBiz.login(form);
-      console.log("Login success:", accessToken);
+      // console.log("Login success:", accessToken);
 
       if (accessToken) {
         localStorage.setItem("accessToken", accessToken);
         const user = await userBiz.me(accessToken);
-        console.log(user);
+        localStorage.setItem("user", JSON.stringify(user));
         navigate("/ticTacToe");
       }
     } catch (err) {

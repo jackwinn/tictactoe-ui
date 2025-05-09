@@ -8,7 +8,6 @@ const me = async (accessToken) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (err) {
     throw err;
@@ -16,7 +15,6 @@ const me = async (accessToken) => {
 };
 
 const register = async (credential) => {
-  console.log(credential)
   const url = `/users/register`;
   const payload = {
     email: credential.email,
@@ -25,7 +23,6 @@ const register = async (credential) => {
   };
   try {
     const response = await baseApi.post(url, payload);
-    console.log(response.data);
     return response.data;
   } catch (err) {
     throw err;
