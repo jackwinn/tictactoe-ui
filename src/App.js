@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./routing/protectedRoute";
 import "./App.css";
-import authUtil from "./utilities/authUtil";
+import tokenUtil from "./utilities/tokenUtil";
 import authBiz from "./businesses/authBiz";
 
 const LoginPage = lazy(() => import("./pages/loginPage"));
@@ -12,19 +12,7 @@ const TicTacToePage = lazy(() => import("./pages/ticTacToePage"));
 
 function App() {
   useEffect(() => {
-    // if (authUtil.isAccessTokenExpired()) {
-    // }
 
-    // if (authUtil.isRefreshTokenExpired()) {
-
-    authUtil.isRefreshTokenExpired();
-
-    // console.log("Refresh token expired, logging out...");
-    // localStorage.removeItem("accessToken");
-    // Optionally clear cookies (if not HttpOnly)
-    // document.cookie = "jwt=; Max-Age=0; path=/;";
-    // navigate("");
-    // }
   }, []);
 
   return (

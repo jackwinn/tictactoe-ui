@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [form, setForm] = useState({
-    email: "jack@gmail.com",
-    password: "1234",
+    email: "",
+    password: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -17,26 +17,30 @@ const LoginPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { accessToken } = await authBiz.login(form);
-      // console.log("Login success:", accessToken);
-
-      if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-        const user = await userBiz.me(accessToken);
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/ticTacToe");
+  const handleSubmit = async () => {
+    let result = {};
+    const validation = authBiz.credentialValidation(form);
+    if (validation.ok) {
+      try {
+        result = await authBiz.login(form);
+        // console.log(result)
+        if (result.accessToken) {
+          localStorage.setItem("accessToken", result.accessToken);
+          const user = await userBiz.me(result.accessToken);
+          localStorage.setItem("user", JSON.stringify(user));
+          navigate("/ticTacToe");
+        }
+      } catch (err) {
+        setError(err.response?.data?.message)
       }
-    } catch (err) {
-      setError("Login failed. Check credentials.");
+    } else {
+      setError(validation.err);
     }
   };
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+      <div className="login-form">
         <h2 className="login-title">Login</h2>
         <label htmlFor="email">Email</label>
         <input
@@ -45,7 +49,7 @@ const LoginPage = () => {
           name="email"
           value={form.email}
           onChange={handleChange}
-          required
+          // required
         />
 
         <label htmlFor="password">Password</label>
@@ -55,15 +59,17 @@ const LoginPage = () => {
           name="password"
           value={form.password}
           onChange={handleChange}
-          required
+          // required
         />
-        <button type="submit">Login</button>
+        <button type="submit" onClick={handleSubmit}>
+          Login
+        </button>
         {error && <p className="error-message">{error}</p>}
 
         <p className="register-link">
           Don't have an account? <Link to="/registration">Register here</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 };

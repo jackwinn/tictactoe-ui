@@ -1,71 +1,71 @@
 .register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f7f9fc;
-  }
-  
-  .register-form {
-    background-color: #ffffff;
-    padding: 2rem 3rem;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    display: flex;
-    flex-direction: column;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f7f9fc;
+}
 
-  .register-form h2 {
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
+.register-form {
+  background-color: #ffffff;
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+}
 
-  .register-form label {
-    margin-top: 1rem;
-    margin-bottom: 0.3rem;
-    font-weight: bold;
-  }
-  
-  .register-form input {
-    margin-bottom: 0.75rem;
-    padding: 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .register-form button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .register-form button:hover {
-    background-color: #45a049;
-  }
-  
-  .message {
-    margin-top: 1rem;
-    text-align: center;
-    color: #007bff;
-  }
-  
-  .login-link {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 0.9rem;
-  }
-  
-  .login-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .login-link a:hover {
-    text-decoration: underline;
-  }
+.register-form h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.register-form label {
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.register-form input {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.register-form button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.register-form button:hover {
+  background-color: #45a049;
+}
+
+.message {
+  color: #4caf50;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.login-link {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

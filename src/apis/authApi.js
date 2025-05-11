@@ -8,7 +8,6 @@ const login = async (credential) => {
   };
   try {
     const response = await baseApi.post(url, payload);
-    console.log(response.data);
     return response.data;
   } catch (err) {
     throw err;
@@ -23,7 +22,6 @@ const logout = async (credential) => {
   };
   try {
     const response = await baseApi.post(url, payload);
-    console.log(response.data);
     return response.data;
   } catch (err) {
     throw err;

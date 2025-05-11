@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
 
 const isAccessTokenExpired = () => {
   const token = localStorage.getItem("accessToken");
@@ -15,20 +14,7 @@ const isAccessTokenExpired = () => {
   }
 };
 
-function getCookie(key) {
-  // var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-  // return b ? b.pop() : "";
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(`${key}=`))
-    ?.split("=")[1];
-}
-
 export const isRefreshTokenExpired = () => {
-  console.log("HI");
-
-  console.log(getCookie("jwt"));
-
   //   const allCookies = document.cookie;
   //   const cookieArray = allCookies.split(";");
 
