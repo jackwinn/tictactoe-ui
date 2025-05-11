@@ -10,9 +10,15 @@ const RegistrationPage = lazy(() => import("./pages/registrationPage"));
 const NotFoundPage = lazy(() => import("./pages/notFoundPage"));
 const TicTacToePage = lazy(() => import("./pages/ticTacToePage"));
 
-function App() {
-  useEffect(() => {
-    console.log(process.env.REACT_APP_ENV_NODE)
+const App = () => {
+  const isAccessTokenExpired = async () => {
+    if (tokenUtil.isAccessTokenExpired()) {
+      await authBiz.refreshToken();
+    }
+  };
+
+  useEffect(async () => {
+    isAccessTokenExpired();
   }, []);
 
   return (
@@ -33,6 +39,6 @@ function App() {
       </Routes>
     </Suspense>
   );
-}
+};
 
 export default App;

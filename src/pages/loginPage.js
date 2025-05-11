@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: "jack@gmail.com",
+    password: "1234",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
