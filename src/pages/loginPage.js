@@ -23,7 +23,7 @@ const LoginPage = () => {
     if (validation.ok) {
       try {
         result = await authBiz.login(form);
-        // console.log(result)
+        // console.log(`login accessToken: ${result.accessToken}`);
         if (result.accessToken) {
           localStorage.setItem("accessToken", result.accessToken);
           const user = await userBiz.me(result.accessToken);
@@ -31,7 +31,7 @@ const LoginPage = () => {
           navigate("/ticTacToe");
         }
       } catch (err) {
-        setError(err.response?.data?.message)
+        setError(err.response?.data?.message);
       }
     } else {
       setError(validation.err);

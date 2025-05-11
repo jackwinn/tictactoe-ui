@@ -11,14 +11,18 @@ const NotFoundPage = lazy(() => import("./pages/notFoundPage"));
 const TicTacToePage = lazy(() => import("./pages/ticTacToePage"));
 
 const App = () => {
-  const isAccessTokenExpired = async () => {
-    if (tokenUtil.isAccessTokenExpired()) {
-      await authBiz.refreshToken();
+  const isAccessTokenValid = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const isTokenExpired = tokenUtil.isAccessTokenExpired();
+
+    if (accessToken && isTokenExpired) {
+      const { refreshedToken } = await authBiz.refreshToken();
+      if (refreshedToken) localStorage.setItem("accessToken", refreshedToken);
     }
   };
 
-  useEffect(async () => {
-    isAccessTokenExpired();
+  useEffect(() => {
+    isAccessTokenValid();
   }, []);
 
   return (

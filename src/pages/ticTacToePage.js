@@ -220,8 +220,8 @@ const TicTacToePage = () => {
                 finishedState !== "opponentLeftMatch" &&
                 finishedState !== "draw" && (
                   <h3 className="finished-state">
-                    {finishedState === playingAs ? "You " : finishedState} won
-                    the game
+                    {finishedState === playingAs ? "you " : finishedState} won
+                    the game!
                   </h3>
                 )}
               {finishedState &&

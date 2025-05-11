@@ -10,7 +10,7 @@ const me = async (accessToken) => {
     });
     return response.data;
   } catch (err) {
-    throw err;
+    // throw err;
   }
 };
 
@@ -25,7 +25,7 @@ const register = async (credential) => {
     const response = await baseApi.post(url, payload);
     return response.data;
   } catch (err) {
-    throw err;
+    // throw err;
   }
 };
 
