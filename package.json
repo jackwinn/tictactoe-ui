@@ -18,8 +18,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start:local": "cross-env NODE_ENV=local react-scripts start",
+    "start:prod": "cross-env NODE_ENV=prod react-scripts start",
+    "build": "cross-env NODE_ENV=prod react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "test": "react-scripts test",
