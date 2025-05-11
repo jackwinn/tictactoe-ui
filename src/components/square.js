@@ -10,13 +10,14 @@ const circleSvg = (
       stroke-linejoin="round"
     ></g>
     <g id="SVGRepo_iconCarrier">
+      {" "}
       <path
         d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
         stroke="#ffffff"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-      ></path>
+      ></path>{" "}
     </g>
   </svg>
 );
@@ -30,13 +31,14 @@ const crossSvg = (
       stroke-linejoin="round"
     ></g>
     <g id="SVGRepo_iconCarrier">
+      {" "}
       <path
         d="M19 5L5 19M5.00001 5L19 19"
         stroke="#fff"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
-      ></path>
+      ></path>{" "}
     </g>
   </svg>
 );

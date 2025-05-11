@@ -14,20 +14,6 @@ const login = async (credential) => {
   }
 };
 
-const logout = async (credential) => {
-  const url = `/auths/logout`;
-  const payload = {
-    email: credential.email,
-    password: credential.password,
-  };
-  try {
-    const response = await baseApi.post(url, payload);
-    return response.data;
-  } catch (err) {
-    // throw err;
-  }
-};
-
 const refreshToken = async () => {
   const url = `/auths/refreshToken`;
   try {
@@ -40,6 +26,5 @@ const refreshToken = async () => {
 
 export default {
   login: login,
-  logout: logout,
   refreshToken: refreshToken,
 };

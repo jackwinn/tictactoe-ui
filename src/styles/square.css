@@ -1,7 +1,7 @@
 .square {
   width: 100px;
   height: 100px;
-  background-color: #e4ca56;
+  background-color: #708090;
   border-radius: 5px;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .circle-won {
-  background-color: #dd7f9f;
+  background-color: #FFB6C1;
 }
 
 .grey-background{
@@ -22,5 +22,5 @@
 }
 
 .cross-won {
-  background-color: rgb(63, 167, 240);
+  background-color: #AFEEEE
 }

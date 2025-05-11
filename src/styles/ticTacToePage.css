@@ -19,7 +19,7 @@
 }
 
 .water-background {
-  background-color: #4b495f;
+  background-color: #7CFC00;
 }
 
 .game-heading {
@@ -27,10 +27,6 @@
   border-radius: 5px;
   text-align: center;
   font-size: 40px;
-}
-
-.game-against {
-  text-align: center;
 }
 
 .square-wrapper {
@@ -54,16 +50,15 @@
 
 .left,
 .right {
-  font-weight: bold;
   height: 30px;
   width: 120px;
+  border-radius: 25px;
   padding-top: 7px;
   font-size: 18px;
   padding-bottom: 5px;
   text-align: center;
-  color: #d3d3d3;
-  border: 1px solid #d3d3d3;
-  background-color: #ffffff;
+  border: 1px solid #778899;
+  color: #778899;
 }
 
 .waiting {
@@ -79,28 +74,14 @@
   bottom: 0;
 }
 
-.current-move-cross,
+.current-move-cross {
+  background-color: #AFEEEE !important;
+  border: none !important;
+  color: #000;
+}
+
 .current-move-circle {
-  border: 1px solid #3fa7f0;
-  color: #3fa7f0;
-
-}
-
-.logout-button {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  padding: 10px 20px;
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  z-index: 1000;
-  transition: background-color 0.2s ease;
-}
-
-.logout-button:hover {
-  background-color: #c0392b;
+  background-color: #FFB6C1 !important;
+  border: none !important;
+  color: #000;
 }
