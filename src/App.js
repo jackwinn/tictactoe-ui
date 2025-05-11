@@ -12,7 +12,7 @@ const TicTacToePage = lazy(() => import("./pages/ticTacToePage"));
 
 function App() {
   useEffect(() => {
-
+    console.log(process.env.REACT_APP_ENV_NODE)
   }, []);
 
   return (

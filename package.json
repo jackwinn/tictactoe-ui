@@ -8,8 +8,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
-    "cross-env": "^7.0.3",
-    "js-cookie": "^3.0.5",
+    "env-cmd": "^10.1.0",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -19,11 +18,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start:local": "cross-env NODE_ENV=local react-scripts start",
-    "start:prod": "cross-env NODE_ENV=prod react-scripts start",
-    "build": "cross-env NODE_ENV=prod react-scripts build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "start:local": "env-cmd -f .env.local npm start",
+    "start:prod": "env-cmd -f .env.prod npm start",
+    "build:prod": "env-cmd -f .env.prod npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
