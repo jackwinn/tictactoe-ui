@@ -139,7 +139,7 @@ const TicTacToePage = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("accessToken");
-    socket.disconnect();
+    if (socket) socket.disconnect();
     navigate("/login");
   };
 

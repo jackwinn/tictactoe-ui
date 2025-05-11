@@ -1,11 +1,32 @@
+1. Setup and installation instructions:
+- clone the Github repository to your desired folder
+- open the project in your preferred code editor
+- ensure you are using node version is 20.18.0 or above
+- ensure you are using npm package manager
+- in the terminal, run the command: npm i to install dependencies
+- in the terminal, run the command: npm run start:local to start the server
+
+2. Technologies used:
+- react.js. Frontend library for building user interfaces
+- react DOM. Package for DOM-specific methods for React
+- react router DOM. Client-side routing for React applications
+- react scripts. Configuration and scripts for Create React App
+- axios. Promise-based HTTP client for API requests
+- socket.IO client. Enables real-time communication between client and server
+- JWT decode. Utility to decode JSON Web Tokens
+- env-cmd. Loads environment variables from a file into process.env
+
+3. Include deployment instructions on Render:
+- create an account on Render: https://render.com/
+- go to "New" > "Static"
+- select Git Provider > login to your Github account 
+- select Github repository > key in Web Service name
+- edit the build command to: npm run build:prod
+- select "instance type": Free
+- click "Deploy Web Service"
+- go to "Redirect/Rewrite" > key in /* in "Source" > key in /index.html in "Destination" > select "Rewrite" action
+- finally click "Add Rule"
 
 
-
-
-https://render.com/docs/deploy-create-react-app?_gl=1*19sh66x*_gcl_au*MTU4NDc5Mzg5LjE3NDY3Nzg0NTI.*_ga*OTc1OTczNTYuMTc0Njc3NTk4Mg..*_ga_QK9L9QJC5N*czE3NDY3NzYwODYkbzEkZzEkdDE3NDY3Nzg0NzIkajQwJGwwJGgw#using-client-side-routing
-
-
--	Setup and installation instructions
--	Technologies used
-•	Include deployment instructions in README.
--	Live link to deployed application
+4 Live link to deployed application:
+- https://tictactoe-ui.onrender.com
