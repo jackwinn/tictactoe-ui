@@ -30,3 +30,7 @@
 
 4 Live link to deployed application:
 - https://tictactoe-ui.onrender.com
+
+5. Extras:
+- Rechallenge option
+- Scoreboard
