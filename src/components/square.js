@@ -46,66 +46,63 @@ const Square = ({
   setGameState,
   socket,
   playingAs,
-  currentElement,
   finishedArrayState,
   setFinishedState,
   finishedState,
   id,
   currentPlayer,
   setCurrentPlayer,
+  rowIndex,
+  colIndex,
 }) => {
-  const [icon, setIcon] = useState(null);
+  const currentElement = gameState[rowIndex][colIndex];
+  const isFilled = currentElement === "circle" || currentElement === "cross";
+  const isDisabled = finishedState || currentPlayer !== playingAs || isFilled;
 
   const clickOnSquare = () => {
-    if (playingAs !== currentPlayer) {
+    if (
+      playingAs !== currentPlayer ||
+      finishedState ||
+      currentElement === "circle" ||
+      currentElement === "cross"
+    ) {
       return;
     }
 
-    if (finishedState) {
-      return;
-    }
+    const myCurrentPlayer = currentPlayer;
 
-    if (!icon) {
-      if (currentPlayer === "circle") {
-        setIcon(circleSvg);
-      } else {
-        setIcon(crossSvg);
-      }
+    socket.emit("playerMoveFromClient", {
+      state: {
+        id,
+        sign: myCurrentPlayer,
+      },
+    });
 
-      const myCurrentPlayer = currentPlayer;
-      socket.emit("playerMoveFromClient", {
-        state: {
-          id,
-          sign: myCurrentPlayer,
-        },
-      });
+    setCurrentPlayer(currentPlayer === "circle" ? "cross" : "circle");
 
-      setCurrentPlayer(currentPlayer === "circle" ? "cross" : "circle");
-
-      setGameState((prevState) => {
-        let newState = [...prevState];
-        const rowIndex = Math.floor(id / 3);
-        const colIndex = id % 3;
-        newState[rowIndex][colIndex] = myCurrentPlayer;
-        return newState;
-      });
-    }
+    setGameState((prevState) => {
+      let newState = [...prevState];
+      const row = Math.floor(id / 3);
+      const col = id % 3;
+      newState[row][col] = myCurrentPlayer;
+      return newState;
+    });
   };
 
   return (
     <div
       onClick={clickOnSquare}
-      className={`square ${finishedState ? "not-allowed" : ""}
-      ${currentPlayer !== playingAs ? "not-allowed" : ""}
-       ${finishedArrayState.includes(id) ? finishedState + "-won" : ""}
-       ${finishedState && finishedState !== playingAs ? "grey-background" : ""}
-       `}
+      className={`square 
+    ${isDisabled ? "not-allowed" : ""}
+    ${finishedArrayState.includes(id) ? finishedState + "-won" : ""}
+    ${finishedState && finishedState !== playingAs ? "grey-background" : ""}
+  `}
     >
       {currentElement === "circle"
         ? circleSvg
         : currentElement === "cross"
         ? crossSvg
-        : icon}
+        : null}
     </div>
   );
 };

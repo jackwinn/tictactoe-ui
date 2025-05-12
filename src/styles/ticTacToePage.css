@@ -97,7 +97,8 @@
   gap: 12px;
 }
 
-.button-group button {
+.button-group button,
+.rechallenge {
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
@@ -127,16 +128,27 @@
 .rechallenge {
   background-color: #d2b48c;
   color: #ffffff;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
   display: block;
   margin: 10px auto 0;
 }
 
 .rechallenge:hover {
   background-color: #aa8759;
+}
+
+.leave-game {
+  color: #ffffff;
+  display: block;
+  margin: 20px auto 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 18px;
+  background-color: #f44336;
+  transition: background-color 0.2s ease;
+}
+
+.leave-game:hover {
+  background-color: #d32f2f;
 }

@@ -18,7 +18,7 @@ const TicTacToePage = () => {
   const [gameState, setGameState] = useState(createInitialGameState());
   const [gameVersion, setGameVersion] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState("circle");
-  const [finishedState, setFinishedState] = useState(false);
+  const [finishedState, setFinishedState] = useState("");
   const [finishedArrayState, setFinishedArrayState] = useState([]);
   const [playOnline, setPlayOnline] = useState(false);
   const [socket, setSocket] = useState(null);
@@ -87,7 +87,7 @@ const TicTacToePage = () => {
   useEffect(() => {
     if (rechallengeAccepted) {
       setGameState(createInitialGameState());
-      setFinishedState(false);
+      setFinishedState("");
       setFinishedArrayState([]);
       setRechallengeRequested(false);
       setRechallengeConfimation(false);
@@ -100,7 +100,7 @@ const TicTacToePage = () => {
   useEffect(() => {
     if (rechallengeDeclined) {
       setGameState(createInitialGameState());
-      setFinishedState(false);
+      setFinishedState("");
       setFinishedArrayState([]);
       setRechallengeConfimation(false);
       setRechallengeRequested(false);
@@ -188,6 +188,11 @@ const TicTacToePage = () => {
     setRechallengeDeclined(true);
   };
 
+  const handleLeave = () => {
+    socket.disconnect();
+    setRechallengeDeclined(true);
+  };
+
   if (!playOnline) {
     return (
       <div className="main-div">
@@ -253,7 +258,7 @@ const TicTacToePage = () => {
       </div>
       <div>
         <h1 className="game-heading water-background">Tic Tac Toe</h1>
-        <h3 className="playing-as">You are {playingAs}</h3>
+        <h3 className="playing-as">you are {playingAs}</h3>
         <div className="square-wrapper">
           {gameState.map((arr, rowIndex) =>
             arr.map((e, colIndex) => (
@@ -268,7 +273,8 @@ const TicTacToePage = () => {
                 setGameState={setGameState}
                 id={rowIndex * 3 + colIndex}
                 key={`square-${rowIndex}-${colIndex}-${gameVersion}`}
-                currentElement={e}
+                rowIndex={rowIndex}
+                colIndex={colIndex}
               />
             ))
           )}
@@ -293,8 +299,12 @@ const TicTacToePage = () => {
           )}
       </div>
       {finishedState && finishedState === "opponentLeftMatch" && (
-        <h2>You won the match, Opponent has left</h2>
+        <h3>Opponent has left</h3>
       )}
+
+      <button className="leave-game" onClick={handleLeave}>
+        Leave game
+      </button>
     </div>
   );
 };
