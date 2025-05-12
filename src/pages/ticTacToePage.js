@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/ticTacToePage.css";
 import Square from "../components/square";
 import { io } from "socket.io-client";
+import Header from "../components/header";
 // import { useNavigate } from "react-router-dom";
 
 const createInitialGameState = () => [
@@ -193,119 +194,126 @@ const TicTacToePage = () => {
     setRechallengeDeclined(true);
   };
 
-  if (!playOnline) {
-    return (
-      <div className="main-div">
-        <button onClick={playOnlineClick} className="playOnline">
-          Play Online
-        </button>
-      </div>
-    );
-  }
-
-  if (playOnline && !opponentName) {
-    return (
-      <div className="waiting">
-        <p>Waiting for opponent</p>
-      </div>
-    );
-  }
-
-  if (rechallengeRequested) {
-    return (
-      <div className="waiting">
-        <p>Waiting for {opponentName} to rechallenge</p>
-      </div>
-    );
-  }
-
-  if (rechallengeConfimation) {
-    return (
-      <div className="waiting">
-        <p>{opponentName} requested for rechallenge</p>
-        <div className="button-group">
-          <button className="accept" onClick={handleAccept}>
-            Accept
-          </button>
-          <button className="decline" onClick={handleDecline}>
-            Decline
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="main-div">
-      <div className="move-detection">
-        <div
-          className={`left ${
-            currentPlayer === playingAs ? "current-move-" + currentPlayer : ""
-          }`}
-        >
-          {playerName}
-        </div>
-        <div>
-          <p>VS</p>
-        </div>
-        <div
-          className={`right ${
-            currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
-          }`}
-        >
-          {opponentName}
-        </div>
-      </div>
-      <div>
-        <h1 className="game-heading water-background">Tic Tac Toe</h1>
-        <h3 className="playing-as">you are {playingAs}</h3>
-        <div className="square-wrapper">
-          {gameState.map((arr, rowIndex) =>
-            arr.map((e, colIndex) => (
-              <Square
-                socket={socket}
-                playingAs={playingAs}
-                gameState={gameState}
-                finishedArrayState={finishedArrayState}
-                finishedState={finishedState}
-                currentPlayer={currentPlayer}
-                setCurrentPlayer={setCurrentPlayer}
-                setGameState={setGameState}
-                id={rowIndex * 3 + colIndex}
-                key={`square-${rowIndex}-${colIndex}-${gameVersion}`}
-                rowIndex={rowIndex}
-                colIndex={colIndex}
-              />
-            ))
-          )}
-        </div>
-        {finishedState &&
-          finishedState !== "opponentLeftMatch" &&
-          finishedState !== "draw" && (
+    <>
+      <Header />
+      <div className="main-div">
+        {!playOnline && (
+            <button onClick={playOnlineClick} className="playOnline">
+              Play Online
+            </button>
+        )}
+
+        {playOnline && !opponentName && (
+          <div className="waiting">
+            <p>Waiting for opponent</p>
+          </div>
+        )}
+
+        {rechallengeRequested && (
+          <div className="waiting">
+            <p>Waiting for {opponentName} to rechallenge</p>
+          </div>
+        )}
+
+        {rechallengeConfimation && (
+          <div className="waiting">
+            <p>{opponentName} requested for rechallenge</p>
+            <div className="button-group">
+              <button className="accept" onClick={handleAccept}>
+                Accept
+              </button>
+              <button className="decline" onClick={handleDecline}>
+                Decline
+              </button>
+            </div>
+          </div>
+        )}
+
+        {playOnline &&
+          opponentName &&
+          rechallengeRequested === false &&
+          rechallengeConfimation === false && (
             <>
-              <h3 className="finished-state">
-                {finishedState === playingAs ? "You " : finishedState} won the
-                game
-              </h3>
-              <button className="rechallenge" onClick={handleRechallenge}>
-                Rechallenge opponent
+              <div className="move-detection">
+                <div
+                  className={`left ${
+                    currentPlayer === playingAs
+                      ? "current-move-" + currentPlayer
+                      : ""
+                  }`}
+                >
+                  {playerName}
+                </div>
+                <div>
+                  <p>VS</p>
+                </div>
+                <div
+                  className={`right ${
+                    currentPlayer !== playingAs
+                      ? "current-move-" + currentPlayer
+                      : ""
+                  }`}
+                >
+                  {opponentName}
+                </div>
+              </div>
+              <div>
+                <h1 className="game-heading water-background">Tic Tac Toe</h1>
+                <h3 className="playing-as">you are {playingAs}</h3>
+                <div className="square-wrapper">
+                  {gameState.map((arr, rowIndex) =>
+                    arr.map((e, colIndex) => (
+                      <Square
+                        socket={socket}
+                        playingAs={playingAs}
+                        gameState={gameState}
+                        finishedArrayState={finishedArrayState}
+                        finishedState={finishedState}
+                        currentPlayer={currentPlayer}
+                        setCurrentPlayer={setCurrentPlayer}
+                        setGameState={setGameState}
+                        id={rowIndex * 3 + colIndex}
+                        key={`square-${rowIndex}-${colIndex}-${gameVersion}`}
+                        rowIndex={rowIndex}
+                        colIndex={colIndex}
+                      />
+                    ))
+                  )}
+                </div>
+                {finishedState &&
+                  finishedState !== "opponentLeftMatch" &&
+                  finishedState !== "draw" && (
+                    <>
+                      <h3 className="finished-state">
+                        {finishedState === playingAs ? "you" : finishedState}{" "}
+                        won the game
+                      </h3>
+                      <button
+                        className="rechallenge"
+                        onClick={handleRechallenge}
+                      >
+                        Rechallenge opponent
+                      </button>
+                    </>
+                  )}
+                {finishedState &&
+                  finishedState !== "opponentLeftMatch" &&
+                  finishedState === "draw" && (
+                    <h3 className="finished-state">It's a Draw</h3>
+                  )}
+              </div>
+              {finishedState && finishedState === "opponentLeftMatch" && (
+                <h3>Opponent has left</h3>
+              )}
+
+              <button className="leave-game" onClick={handleLeave}>
+                Leave game
               </button>
             </>
           )}
-        {finishedState &&
-          finishedState !== "opponentLeftMatch" &&
-          finishedState === "draw" && (
-            <h3 className="finished-state">It's a Draw</h3>
-          )}
       </div>
-      {finishedState && finishedState === "opponentLeftMatch" && (
-        <h3>Opponent has left</h3>
-      )}
-
-      <button className="leave-game" onClick={handleLeave}>
-        Leave game
-      </button>
-    </div>
+    </>
   );
 };
 

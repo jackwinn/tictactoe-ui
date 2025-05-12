@@ -27,6 +27,7 @@ const LoginPage = () => {
         if (result.accessToken) {
           localStorage.setItem("accessToken", result.accessToken);
           const user = await userBiz.me(result.accessToken);
+          console.log(user)
           localStorage.setItem("user", JSON.stringify(user));
           navigate("/ticTacToe");
         }
