@@ -29,7 +29,27 @@ const register = async (credential) => {
   }
 };
 
+const updateScore = async (gameResult, userId, accessToken) => {
+  const url = `/users/updateScore`;
+  const payload = {
+    gameResult: gameResult,
+    userId: userId,
+  };
+  console.log(gameResult, userId, accessToken)
+  try {
+    const response = await baseApi.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    // throw err;
+  }
+};
+
 export default {
   me: me,
   register: register,
+  updateScore: updateScore,
 };

@@ -4,14 +4,16 @@ import { useNavigate } from "react-router-dom";
 import authBiz from "../businesses/authBiz";
 import userBiz from "../businesses/userBiz";
 import { Link } from "react-router-dom";
+import { useUser } from "../contexts/userContext";
 
 const LoginPage = () => {
+  const { setUser } = useUser();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
-    email: "jack@gmail.com",
-    password: "1234",
+    email: "",
+    password: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value.trim() });
@@ -25,10 +27,13 @@ const LoginPage = () => {
         result = await authBiz.login(form);
         // console.log(`login accessToken: ${result.accessToken}`);
         if (result.accessToken) {
-          localStorage.setItem("accessToken", result.accessToken);
+          localStorage.setItem(
+            "accessToken",
+            JSON.stringify(result.accessToken)
+          );
           const user = await userBiz.me(result.accessToken);
-          console.log(user)
-          localStorage.setItem("user", JSON.stringify(user));
+          // console.log(user)
+          if (user) setUser(user)
           navigate("/ticTacToe");
         }
       } catch (err) {
@@ -50,7 +55,6 @@ const LoginPage = () => {
           name="email"
           value={form.email}
           onChange={handleChange}
-          // required
         />
 
         <label htmlFor="password">Password</label>
@@ -60,7 +64,6 @@ const LoginPage = () => {
           name="password"
           value={form.password}
           onChange={handleChange}
-          // required
         />
         <button type="submit" onClick={handleSubmit}>
           Login

@@ -36,8 +36,14 @@ const credentialValidation = (credential) => {
   };
 };
 
+const updateScore = async (gameResult, userId, accessToken) => {
+  const response = await userApi.updateScore(gameResult, userId, accessToken);
+  return response;
+};
+
 export default {
   me: me,
   register: register,
   credentialValidation: credentialValidation,
+  updateScore: updateScore,
 };

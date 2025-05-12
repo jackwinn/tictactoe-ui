@@ -3,7 +3,8 @@ import "../styles/ticTacToePage.css";
 import Square from "../components/square";
 import { io } from "socket.io-client";
 import Header from "../components/header";
-// import { useNavigate } from "react-router-dom";
+import userBiz from "../businesses/userBiz";
+import { useUser } from "../contexts/userContext";
 
 const createInitialGameState = () => [
   [1, 2, 3],
@@ -12,9 +13,8 @@ const createInitialGameState = () => [
 ];
 
 const TicTacToePage = () => {
-  // const navigate = useNavigate();
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const token = localStorage.getItem("accessToken");
+  const { user, setUser } = useUser();
 
   const [gameState, setGameState] = useState(createInitialGameState());
   const [gameVersion, setGameVersion] = useState(0);
@@ -78,10 +78,27 @@ const TicTacToePage = () => {
     return null;
   };
 
+  const updateScore = async (gameResult) => {
+    const result = await userBiz.updateScore(gameResult, user.id, token);
+    setUser(result);
+  };
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
+
   useEffect(() => {
     const winner = checkWinner();
+    let gameResult = "";
     if (winner) {
-      setFinishedState(winner);
+      if (winner === "draw") {
+        gameResult = "draw";
+      } else if (playingAs === winner) {
+        gameResult = "win";
+      } else {
+        gameResult = "lose";
+      }
+      updateScore(gameResult);
     }
   }, [gameState]);
 
@@ -199,9 +216,9 @@ const TicTacToePage = () => {
       <Header />
       <div className="main-div">
         {!playOnline && (
-            <button onClick={playOnlineClick} className="playOnline">
-              Play Online
-            </button>
+          <button onClick={playOnlineClick} className="playOnline">
+            Play Online
+          </button>
         )}
 
         {playOnline && !opponentName && (
@@ -286,7 +303,7 @@ const TicTacToePage = () => {
                   finishedState !== "draw" && (
                     <>
                       <h3 className="finished-state">
-                        {finishedState === playingAs ? "you" : finishedState}{" "}
+                        {finishedState === playingAs ? "you" : finishedState}
                         won the game
                       </h3>
                       <button

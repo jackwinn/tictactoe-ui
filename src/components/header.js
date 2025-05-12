@@ -1,15 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
+import { useUser } from "../contexts/userContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const { user, setUser } = useUser();
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
+    setUser({});
     navigate("/login");
   };
 
@@ -21,8 +21,7 @@ const Header = () => {
 
       <div className="header-right">
         <h3 className="score-text">
-          Your score |
-          Win: {user.win_score} Lose: {user.lose_score} Draw:{" "}
+          Your score | Win: {user.win_score} Lose: {user.lose_score} Draw:{" "}
           {user.draw_score}
         </h3>
         <button className="logout-button" onClick={handleLogout}>
