@@ -19,7 +19,7 @@
 }
 
 .water-background {
-  background-color: #7CFC00;
+  background-color: #7cfc00;
 }
 
 .game-heading {
@@ -27,6 +27,10 @@
   border-radius: 5px;
   text-align: center;
   font-size: 40px;
+}
+
+.playing-as {
+  text-align: center;
 }
 
 .square-wrapper {
@@ -72,16 +76,67 @@
   left: 0;
   right: 0;
   bottom: 0;
+  flex-direction: column;
 }
 
 .current-move-cross {
-  background-color: #AFEEEE !important;
+  background-color: #afeeee !important;
   border: none !important;
   color: #000;
 }
 
 .current-move-circle {
-  background-color: #FFB6C1 !important;
+  background-color: #ffb6c1 !important;
   border: none !important;
   color: #000;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.button-group button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button-group .accept {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+.button-group .accept:hover {
+  background-color: #45a049;
+}
+
+.button-group .decline {
+  background-color: #f44336;
+  color: #ffffff;
+}
+
+.button-group .decline:hover {
+  background-color: #d32f2f;
+}
+
+.rechallenge {
+  background-color: #d2b48c;
+  color: #ffffff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: block;
+  margin: 10px auto 0;
+}
+
+.rechallenge:hover {
+  background-color: #aa8759;
 }

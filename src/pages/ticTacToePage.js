@@ -2,28 +2,34 @@ import { useState, useEffect } from "react";
 import "../styles/ticTacToePage.css";
 import Square from "../components/square";
 import { io } from "socket.io-client";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
-const renderFrom = [
+const createInitialGameState = () => [
   [1, 2, 3],
   [4, 5, 6],
   [7, 8, 9],
 ];
 
 const TicTacToePage = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
 
-  const [gameState, setGameState] = useState(renderFrom);
+  const [gameState, setGameState] = useState(createInitialGameState());
+  const [gameVersion, setGameVersion] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState("circle");
-  const [finishedState, setFinishetState] = useState(false);
+  const [finishedState, setFinishedState] = useState(false);
   const [finishedArrayState, setFinishedArrayState] = useState([]);
   const [playOnline, setPlayOnline] = useState(false);
   const [socket, setSocket] = useState(null);
   const [playerName, setPlayerName] = useState("");
   const [opponentName, setOpponentName] = useState(null);
   const [playingAs, setPlayingAs] = useState(null);
+
+  const [rechallengeRequested, setRechallengeRequested] = useState(false);
+  const [rechallengeConfimation, setRechallengeConfimation] = useState(false);
+  const [rechallengeAccepted, setRechallengeAccepted] = useState(false);
+  const [rechallengeDeclined, setRechallengeDeclined] = useState(false);
 
   const checkWinner = () => {
     // row dynamic
@@ -74,12 +80,39 @@ const TicTacToePage = () => {
   useEffect(() => {
     const winner = checkWinner();
     if (winner) {
-      setFinishetState(winner);
+      setFinishedState(winner);
     }
   }, [gameState]);
 
+  useEffect(() => {
+    if (rechallengeAccepted) {
+      setGameState(createInitialGameState());
+      setFinishedState(false);
+      setFinishedArrayState([]);
+      setRechallengeRequested(false);
+      setRechallengeConfimation(false);
+      setRechallengeAccepted(false);
+      setRechallengeDeclined(false);
+      setGameVersion((prev) => prev + 1);
+    }
+  }, [rechallengeAccepted]);
+
+  useEffect(() => {
+    if (rechallengeDeclined) {
+      setGameState(createInitialGameState());
+      setFinishedState(false);
+      setFinishedArrayState([]);
+      setRechallengeConfimation(false);
+      setRechallengeRequested(false);
+      setRechallengeAccepted(false);
+      setRechallengeDeclined(false);
+      setGameVersion((prev) => prev + 1);
+      setPlayOnline(false);
+    }
+  }, [rechallengeDeclined]);
+
   socket?.on("opponentLeftMatch", () => {
-    setFinishetState("opponentLeftMatch");
+    setFinishedState("opponentLeftMatch");
   });
 
   socket?.on("playerMoveFromServer", (data) => {
@@ -107,6 +140,22 @@ const TicTacToePage = () => {
     setOpponentName(data.opponentName);
   });
 
+  socket?.on("rechallengeRequestedFromServer", (data) => {
+    setRechallengeConfimation(data.rechallengeConfimation);
+  });
+
+  socket?.on("rechallengeAcceptedFromServer", (data) => {
+    // setRechallengeRequested(false);
+    // setRechallengeConfimation(false);
+    setRechallengeAccepted(true);
+  });
+
+  socket?.on("rechallengeDeclinedFromServer", (data) => {
+    // setRechallengeConfimation(false);
+    // setRechallengeRequested(false);
+    setRechallengeDeclined(true);
+  });
+
   async function playOnlineClick() {
     const username = user.username;
     setPlayerName(username);
@@ -122,6 +171,23 @@ const TicTacToePage = () => {
     setSocket(newSocket);
   }
 
+  const handleRechallenge = () => {
+    socket.emit("rechallengeRequestedFromClient", {
+      rechallengeRequest: true,
+    });
+    setRechallengeRequested(true);
+  };
+
+  const handleAccept = () => {
+    socket.emit("rechallengeAcceptedFromClient");
+    setRechallengeAccepted(true);
+  };
+
+  const handleDecline = () => {
+    socket.emit("rechallengeDeclinedFromClient");
+    setRechallengeDeclined(true);
+  };
+
   if (!playOnline) {
     return (
       <div className="main-div">
@@ -134,9 +200,33 @@ const TicTacToePage = () => {
 
   if (playOnline && !opponentName) {
     return (
-        <div className="waiting">
-          <p>Waiting for opponent</p>
+      <div className="waiting">
+        <p>Waiting for opponent</p>
+      </div>
+    );
+  }
+
+  if (rechallengeRequested) {
+    return (
+      <div className="waiting">
+        <p>Waiting for {opponentName} to rechallenge</p>
+      </div>
+    );
+  }
+
+  if (rechallengeConfimation) {
+    return (
+      <div className="waiting">
+        <p>{opponentName} requested for rechallenge</p>
+        <div className="button-group">
+          <button className="accept" onClick={handleAccept}>
+            Accept
+          </button>
+          <button className="decline" onClick={handleDecline}>
+            Decline
+          </button>
         </div>
+      </div>
     );
   }
 
@@ -150,6 +240,9 @@ const TicTacToePage = () => {
         >
           {playerName}
         </div>
+        <div>
+          <p>VS</p>
+        </div>
         <div
           className={`right ${
             currentPlayer !== playingAs ? "current-move-" + currentPlayer : ""
@@ -160,34 +253,38 @@ const TicTacToePage = () => {
       </div>
       <div>
         <h1 className="game-heading water-background">Tic Tac Toe</h1>
+        <h3 className="playing-as">You are {playingAs}</h3>
         <div className="square-wrapper">
           {gameState.map((arr, rowIndex) =>
-            arr.map((e, colIndex) => {
-              return (
-                <Square
-                  socket={socket}
-                  playingAs={playingAs}
-                  gameState={gameState}
-                  finishedArrayState={finishedArrayState}
-                  finishedState={finishedState}
-                  currentPlayer={currentPlayer}
-                  setCurrentPlayer={setCurrentPlayer}
-                  setGameState={setGameState}
-                  id={rowIndex * 3 + colIndex}
-                  key={rowIndex * 3 + colIndex}
-                  currentElement={e}
-                />
-              );
-            })
+            arr.map((e, colIndex) => (
+              <Square
+                socket={socket}
+                playingAs={playingAs}
+                gameState={gameState}
+                finishedArrayState={finishedArrayState}
+                finishedState={finishedState}
+                currentPlayer={currentPlayer}
+                setCurrentPlayer={setCurrentPlayer}
+                setGameState={setGameState}
+                id={rowIndex * 3 + colIndex}
+                key={`square-${rowIndex}-${colIndex}-${gameVersion}`}
+                currentElement={e}
+              />
+            ))
           )}
         </div>
         {finishedState &&
           finishedState !== "opponentLeftMatch" &&
           finishedState !== "draw" && (
-            <h3 className="finished-state">
-              {finishedState === playingAs ? "You " : finishedState} won the
-              game
-            </h3>
+            <>
+              <h3 className="finished-state">
+                {finishedState === playingAs ? "You " : finishedState} won the
+                game
+              </h3>
+              <button className="rechallenge" onClick={handleRechallenge}>
+                Rechallenge opponent
+              </button>
+            </>
           )}
         {finishedState &&
           finishedState !== "opponentLeftMatch" &&
@@ -195,9 +292,6 @@ const TicTacToePage = () => {
             <h3 className="finished-state">It's a Draw</h3>
           )}
       </div>
-      {!finishedState && opponentName && (
-        <h2>You are playing against {opponentName}</h2>
-      )}
       {finishedState && finishedState === "opponentLeftMatch" && (
         <h2>You won the match, Opponent has left</h2>
       )}
