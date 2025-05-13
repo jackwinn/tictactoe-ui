@@ -25,7 +25,7 @@ const register = async (credential) => {
     const response = await baseApi.post(url, payload);
     return response.data;
   } catch (err) {
-    // throw err;
+    throw err;
   }
 };
 
@@ -35,7 +35,7 @@ const updateScore = async (gameResult, userId, accessToken) => {
     gameResult: gameResult,
     userId: userId,
   };
-  console.log(gameResult, userId, accessToken)
+  // console.log(gameResult, userId, accessToken)
   try {
     const response = await baseApi.post(url, payload, {
       headers: {
@@ -44,7 +44,7 @@ const updateScore = async (gameResult, userId, accessToken) => {
     });
     return response.data;
   } catch (err) {
-    // throw err;
+    throw err;
   }
 };
 

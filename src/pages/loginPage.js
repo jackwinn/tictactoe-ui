@@ -37,6 +37,7 @@ const LoginPage = () => {
           navigate("/ticTacToe");
         }
       } catch (err) {
+        // console.log(err.response?.data?.message)
         setError(err.response?.data?.message);
       }
     } else {

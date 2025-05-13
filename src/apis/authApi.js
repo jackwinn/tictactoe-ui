@@ -10,7 +10,7 @@ const login = async (credential) => {
     const response = await baseApi.post(url, payload);
     return response.data;
   } catch (err) {
-    // throw err;
+    throw err;
   }
 };
 
@@ -20,7 +20,7 @@ const refreshToken = async () => {
     const response = await baseApi.post(url);
     return response.data;
   } catch (err) {
-    // throw err;
+    throw err;
   }
 };
 

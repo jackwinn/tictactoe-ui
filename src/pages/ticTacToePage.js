@@ -83,9 +83,9 @@ const TicTacToePage = () => {
     setUser(result);
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, []);
+  // useEffect(() => {
+  //   console.log(user);
+  // }, []);
 
   useEffect(() => {
     const winner = checkWinner();
