@@ -31,9 +31,9 @@ const LoginPage = () => {
             "accessToken",
             JSON.stringify(result.accessToken)
           );
-          const user = await userBiz.me(result.accessToken);
+          const userData = await userBiz.me(result.accessToken);
           // console.log(user)
-          if (user) setUser(user)
+          if (userData) setUser(userData)
           navigate("/ticTacToe");
         }
       } catch (err) {
