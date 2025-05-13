@@ -5,7 +5,6 @@ const isValidEmail = (email) => {
 };
 
 const isValidPassword = (password) => {
-  const errors = {};
   const upperCaseRegex = /[A-Z]/;
   const lowerCaseRegex = /[a-z]/;
   const numberRegex = /[0-9]/;
@@ -22,11 +21,15 @@ const isValidPassword = (password) => {
     missingCriteria.push("one number");
   }
 
-  if (missingCriteria.length > 0) {
-    return (errors.password = `Password must contain at least ${missingCriteria.join(
-      ", "
-    )}.`);
+  if(password.length < 8) {
+    missingCriteria.push("8 characters")
   }
+
+  if (missingCriteria.length > 0) {
+    return `Password must contain at least ${missingCriteria.join(", ")}.`;
+  }
+
+  return null;
 };
 
 export default {

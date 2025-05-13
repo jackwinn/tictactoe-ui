@@ -17,17 +17,19 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     const validation = userBiz.credentialValidation(form);
+    console.log(validation);
     if (validation.ok) {
       try {
         const response = await userBiz.register(form);
-        if (response) setMessage(response.message);
-        setForm({
-          email: "",
-          password: "",
-          username: "",
-        });
+        if (response) {
+          setMessage(response.message);
+          setForm({
+            email: "",
+            password: "",
+            username: "",
+          });
+        }
       } catch (err) {
         setError(err.response?.data?.message);
       }

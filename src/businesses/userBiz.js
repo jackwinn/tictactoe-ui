@@ -19,16 +19,14 @@ const invalid = (err) => {
 };
 
 const credentialValidation = (credential) => {
-  // console.log(credential.username);
+  // console.log(credential);
   if (!credential.email) return invalid("Email is required.");
   if (credential.email && regexUtil.isValidEmail(credential.email))
     return invalid("Invalid email format.");
   if (!credential.password) return invalid("Password is required.");
-  if (credential.password && credential.password.length < 8)
-    return invalid("Password must be at least 8 characters.");
   if (credential.password) {
-    const validPassword = regexUtil.isValidPassword(credential.password);
-    return invalid(validPassword);
+    const errorMessage = regexUtil.isValidPassword(credential.password);
+    if (errorMessage) return invalid(errorMessage);
   }
   if (!credential.username) return invalid("Username is required.");
   return {
@@ -37,7 +35,13 @@ const credentialValidation = (credential) => {
 };
 
 const updateScore = async (gameResult, userId, accessToken) => {
+  // console.log(gameResult, userId, accessToken)
   const response = await userApi.updateScore(gameResult, userId, accessToken);
+  return response;
+};
+
+const list = async (accessToken) => {
+  const response = await userApi.list(accessToken);
   return response;
 };
 
@@ -46,4 +50,5 @@ export default {
   register: register,
   credentialValidation: credentialValidation,
   updateScore: updateScore,
+  list: list,
 };

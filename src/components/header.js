@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
-import { useUser } from "../contexts/userContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useUser();
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
-    setUser({});
+    localStorage.removeItem("user");
     navigate("/login");
   };
+
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   return (
     <header className="header-container">

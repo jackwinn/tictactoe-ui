@@ -10,7 +10,7 @@ const me = async (accessToken) => {
     });
     return response.data;
   } catch (err) {
-    // throw err;
+    throw err;
   }
 };
 
@@ -21,6 +21,7 @@ const register = async (credential) => {
     password: credential.password,
     username: credential.username,
   };
+  // console.log(payload)
   try {
     const response = await baseApi.post(url, payload);
     return response.data;
@@ -35,9 +36,24 @@ const updateScore = async (gameResult, userId, accessToken) => {
     gameResult: gameResult,
     userId: userId,
   };
-  // console.log(gameResult, userId, accessToken)
+  // console.log(payload)
+  // console.log(accessToken)
   try {
     const response = await baseApi.post(url, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+const list = async (accessToken) => {
+  const url = `/users/list`;
+  try {
+    const response = await baseApi.get(url, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -52,4 +68,5 @@ export default {
   me: me,
   register: register,
   updateScore: updateScore,
+  list: list,
 };

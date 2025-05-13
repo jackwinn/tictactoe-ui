@@ -12,7 +12,7 @@
   background-color: #e4ca56;
   font-size: 60px;
   cursor: pointer;
-  margin-top: 40vh;
+  margin-top: 10vh;
   padding: 6px 10px;
   border-radius: 5px;
   outline: none;
@@ -151,4 +151,36 @@
 
 .leave-game:hover {
   background-color: #d32f2f;
+}
+
+.top-players-title {
+  margin-top: 24px;
+  text-align: center;
+  color: #444;
+}
+
+.top-players-table {
+  width: 30%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.top-players-table th,
+.top-players-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.top-players-table thead {
+  background-color: #f4f4f4;
+}
+
+.top-players-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.top-players-table th {
+  font-weight: bold;
+  color: #333;
 }

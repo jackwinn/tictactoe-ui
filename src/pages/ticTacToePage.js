@@ -4,7 +4,6 @@ import Square from "../components/square";
 import { io } from "socket.io-client";
 import Header from "../components/header";
 import userBiz from "../businesses/userBiz";
-import { useUser } from "../contexts/userContext";
 
 const createInitialGameState = () => [
   [1, 2, 3],
@@ -14,7 +13,8 @@ const createInitialGameState = () => [
 
 const TicTacToePage = () => {
   const token = localStorage.getItem("accessToken");
-  const { user, setUser } = useUser();
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   const [gameState, setGameState] = useState(createInitialGameState());
   const [gameVersion, setGameVersion] = useState(0);
@@ -31,6 +31,8 @@ const TicTacToePage = () => {
   const [rechallengeConfimation, setRechallengeConfimation] = useState(false);
   const [rechallengeAccepted, setRechallengeAccepted] = useState(false);
   const [rechallengeDeclined, setRechallengeDeclined] = useState(false);
+
+  const [topPlayers, setTopPlayers] = useState([]);
 
   const checkWinner = () => {
     // row dynamic
@@ -80,17 +82,25 @@ const TicTacToePage = () => {
 
   const updateScore = async (gameResult) => {
     const result = await userBiz.updateScore(gameResult, user.id, token);
-    setUser(result);
+    localStorage.setItem("user", JSON.stringify(result));
   };
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, []);
+  const getTopPlayers = async () => {
+    const result = await userBiz.list(token);
+    // console.log(result);
+    if (result) setTopPlayers(result);
+  };
+
+  useEffect(() => {
+    // console.log(user);
+    getTopPlayers();
+  }, []);
 
   useEffect(() => {
     const winner = checkWinner();
     let gameResult = "";
     if (winner) {
+      setFinishedState(winner);
       if (winner === "draw") {
         gameResult = "draw";
       } else if (playingAs === winner) {
@@ -216,9 +226,36 @@ const TicTacToePage = () => {
       <Header />
       <div className="main-div">
         {!playOnline && (
-          <button onClick={playOnlineClick} className="playOnline">
-            Play Online
-          </button>
+          <>
+            <h3 className="top-players-title">Current Top 10 Players</h3>
+
+            <table className="top-players-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Player</th>
+                  <th>Win</th>
+                  <th>Lose</th>
+                  <th>Draw</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topPlayers.map((player, index) => (
+                  <tr key={player.username}>
+                    <td>{index + 1}</td>
+                    <td>{player.username}</td>
+                    <td>{player.win_score}</td>
+                    <td>{player.lose_score}</td>
+                    <td>{player.draw_score}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button onClick={playOnlineClick} className="playOnline">
+              Play Online
+            </button>
+          </>
         )}
 
         {playOnline && !opponentName && (
@@ -303,7 +340,7 @@ const TicTacToePage = () => {
                   finishedState !== "draw" && (
                     <>
                       <h3 className="finished-state">
-                        {finishedState === playingAs ? "you" : finishedState}
+                        {finishedState === playingAs ? "you" : finishedState}{" "}
                         won the game
                       </h3>
                       <button

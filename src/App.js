@@ -4,7 +4,6 @@ import ProtectedRoute from "./routing/protectedRoute";
 import "./App.css";
 import tokenUtil from "./utilities/tokenUtil";
 import authBiz from "./businesses/authBiz";
-import Header from "./components/header";
 
 const LoginPage = lazy(() => import("./pages/loginPage"));
 const RegistrationPage = lazy(() => import("./pages/registrationPage"));

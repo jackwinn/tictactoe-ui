@@ -4,10 +4,8 @@ import { useNavigate } from "react-router-dom";
 import authBiz from "../businesses/authBiz";
 import userBiz from "../businesses/userBiz";
 import { Link } from "react-router-dom";
-import { useUser } from "../contexts/userContext";
 
 const LoginPage = () => {
-  const { setUser } = useUser();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
@@ -16,7 +14,7 @@ const LoginPage = () => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value.trim() });
+    setForm({ ...form, [e.target.name]: e.target.value.trim()});
   };
 
   const handleSubmit = async () => {
@@ -31,9 +29,9 @@ const LoginPage = () => {
             "accessToken",
             JSON.stringify(result.accessToken)
           );
-          const userData = await userBiz.me(result.accessToken);
+          const user = await userBiz.me(result.accessToken);
           // console.log(user)
-          if (userData) setUser(userData)
+          localStorage.setItem("user", JSON.stringify(user));
           navigate("/ticTacToe");
         }
       } catch (err) {
