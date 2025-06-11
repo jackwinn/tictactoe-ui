@@ -36,7 +36,6 @@
 - Scoreboard
 
 6. Demo Instructions: 
-demo instructions: 
 - create 2 accounts with different emails
 - login 1 account in regular mode and another 1 in incognito mode (your preferred browser)
 - click "Play Online" on both window to start the match
