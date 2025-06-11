@@ -16,7 +16,7 @@
 - JWT decode. Utility to decode JSON Web Tokens
 - env-cmd. Loads environment variables from a file into process.env
 
-3. Include deployment instructions on Render:
+3. Deployment instructions on Render:
 - create an account on Render: https://render.com/
 - go to "New" > "Static"
 - select Git Provider > login to your Github account 
